@@ -35,8 +35,14 @@ public class Main {
                     System.exit(0);
 
                 case 1:
+                    long time = System.currentTimeMillis();
                     sort(sortMethod);
+                    time = System.currentTimeMillis() - time;
+                    System.out.println("n: " + A.length + "\ttid: " + time + " ms");
+                    System.out.println();
+
                     break;
+
                 case 2:
                     calculate(sortMethod);
                     break;
@@ -49,7 +55,20 @@ public class Main {
     }
 
     private static void sort(int sortMethod) {
-        System.out.println("to be implemented");
+        switch (sortMethod) {
+            case 1:
+                Sort.selectionSort(A);
+                break;
+            case 2:
+                Sort.quickSort(A, 0, A.length - 1);
+                break;
+            case 3:
+                Sort.mergeSort(A);
+                break;
+            case 4:
+                Sort.radixSort(A);
+
+        }
     }
 
     private static int getSortMethod() {
