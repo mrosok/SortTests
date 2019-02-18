@@ -1,0 +1,12 @@
+Get input:
+    - length of array;
+    - sorting method
+    - execute OR calculate constant
+    - exit
+
+    while not exit
+        if execute
+            run selected sort(array)
+            show time
+        else if calculate
+            run calculate constant
