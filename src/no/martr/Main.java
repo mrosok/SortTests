@@ -48,11 +48,23 @@ public class Main {
 
     private static void calculate(int sortMethod, long time) {
         switch (sortMethod) {
+            //dette virker fortsatt ikke....
+            case 1:
+                Sort.insertionSort(A);
+                time = System.currentTimeMillis() - time;
+                time *= 10000;
+                float C = (float) (time/(A.length * A.length));
+                System.out.println("time: " + time + " n^2: " + A.length * A.length);
+                System.out.println("Constant: ~" + C);
+                break;
+
             case 2:
                 Sort.quickSort(A,0, A.length-1);
                 time = System.currentTimeMillis() - time;
-                float C = (float) (time/(A.length * Math.log(A.length)));
-                System.out.println(C);
+                time *= 10000;
+                C = (float) (time/(A.length * Math.log(A.length)));
+                System.out.println("Constant: ~" + C);
+                break;
         }
     }
 
@@ -70,6 +82,7 @@ public class Main {
             case 4:
                 int digits = Sort.countDigits(A.length);
                 Sort.radixSort(A, digits);
+                break;
         }
     }
 
