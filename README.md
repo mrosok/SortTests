@@ -1,5 +1,5 @@
 # SortTests
-Demonstration of Sorting Alorithms
+Demonstration of Sorting Algorithms
 
 Oblig 3 ITF20006-1 19V Algoritmer og datastrukturer, HiOF 2019
 
