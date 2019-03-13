@@ -7,9 +7,11 @@ import java.util.Scanner;
 public class Main {
     public static final int
         MAX_SEQUENTIAL = 100000,
+        MAX_RADIX = 10000000,
         MAX_N = 100000000;
+
     public static int[] A;
-    public static int sortMethod, action;
+    public static int n, sortMethod, action;
     public static long time;
 
     public static void main(String[] args) {
@@ -21,10 +23,10 @@ public class Main {
            time = System.currentTimeMillis();
            sort(sortMethod);
            time = System.currentTimeMillis() - time;
-           System.out.println("Sort finished in  " + time + " ms");
+           System.out.println("Sortering ferdig på  " + time + " ms");
        } else {
             time = System.currentTimeMillis();
-            calculate(sortMethod, time);
+            calculate(sortMethod);
        }
     }
 
@@ -46,55 +48,17 @@ public class Main {
         return option;
     }
 
-    private static void calculate(int sortMethod, long time) {
-        switch (sortMethod) {
-            //dette virker fortsatt ikke....
-            case 1:
-                Sort.insertionSort(A);
-                time = System.currentTimeMillis() - time;
-                time *= 10000;
-                float C = (float) (time/(A.length * A.length));
-                System.out.println("time: " + time + " n^2: " + A.length * A.length);
-                System.out.println("Constant: ~" + C);
-                break;
-
-            case 2:
-                Sort.quickSort(A,0, A.length-1);
-                time = System.currentTimeMillis() - time;
-                time *= 10000;
-                C = (float) (time/(A.length * Math.log(A.length)));
-                System.out.println("Constant: ~" + C);
-                break;
-        }
-    }
-
-    private static void sort(int sortMethod) {
-        switch (sortMethod) {
-            case 1:
-                Sort.insertionSort(A);
-                break;
-            case 2:
-                Sort.quickSort(A, 0, A.length - 1);
-                break;
-            case 3:
-                Sort.mergeSort(A, 0, A.length -1);
-                break;
-            case 4:
-                int digits = Sort.countDigits(A.length);
-                Sort.radixSort(A, digits);
-                break;
-        }
-    }
-
-    // kan trenge validering (input som ikke er av type int vil feile)
     public static int[] getArray() {
-        int n = -1;
+        n = -1;
         int max;
         Scanner scanner = new Scanner(new InputStreamReader(System.in));
         if (sortMethod == 1)
             max = MAX_SEQUENTIAL;
+        else if (sortMethod == 4)
+            max = MAX_RADIX;
         else
             max = MAX_N;
+
         while (n < 0 || n > max) {
             System.out.print("Velg antall tall som skal sorteres (1-" + max + ", 0 for å avslutte): ");
             n = scanner.nextInt();
@@ -104,7 +68,6 @@ public class Main {
         return makeArray(n);
     }
 
-    // kan trenge validering (input som ikke er av type int vil feile)
     public static int chooseAction() {
         Scanner scanner = new Scanner(new InputStreamReader(System.in));
         int choice = -1;
@@ -117,6 +80,99 @@ public class Main {
         return choice;
     }
 
+    private static void sort(int sortMethod) {
+        switch (sortMethod) {
+            case 1:
+                Sort.insertionSort(A);
+                break;
+            case 2:
+                Sort.quickSort(A, 0, n - 1);
+                break;
+            case 3:
+                Sort.mergeSort(A, 0, n -1);
+                break;
+            case 4:
+                int digits = Sort.countDigits(n);
+                Sort.radixSort(A, digits);
+                break;
+        }
+    }
+
+    private static void calculate(int sortMethod) {
+        switch (sortMethod) {
+            case 1:
+                calculateInsertion();
+                break;
+
+            case 2:
+                calculateQuickSort();
+                break;
+
+            case 3:  //merge-sort arbeidsmengde O(n log(n))
+                calculateMergeSort();
+                break;
+
+            case 4:  //radix-sort arbeidsmengde O(kn) eller O(n)
+                calculateRadixSort();
+                break;
+        }
+    }
+
+    private static void calculateRadixSort() {
+        float C = 0;
+        int digits = Sort.countDigits(n);
+
+        for (int i = 0; i < 10; i++) {
+            time = System.currentTimeMillis();
+            Sort.radixSort(A,digits);
+            time = System.currentTimeMillis() - time;
+            time *= 1000;
+            C += (float) time / ( n * digits);
+        }
+        C /= 10;
+        System.out.println("Constant: ~ " + C);
+
+    }
+
+    private static void calculateMergeSort() {
+        float C = 0;
+        for (int i = 0; i < 10; i++) {
+            time = System.currentTimeMillis();
+            Sort.mergeSort(A,0, n-1);
+            time = System.currentTimeMillis() - time;
+            time *= 1000;
+            C += (float) (time/(n * Math.log(n)));
+        }
+        C /= 10;
+        System.out.println("Constant: ~ " + C);
+    }
+
+    public static void calculateInsertion() {
+        float C = 0;
+        for (int i = 0; i < 10; i++) {
+            time = System.currentTimeMillis();
+            Sort.insertionSort(A);
+            time = System.currentTimeMillis() - time;
+            time *= 1000;
+            C += (float) time/ (n * n);
+        }
+        C /= 10;
+        System.out.println("Constant: ~ " + C);
+    }
+
+    public static void calculateQuickSort() {
+        float C = 0;
+        for (int i = 0; i < 10; i++) {
+            time = System.currentTimeMillis();
+            Sort.quickSort(A,0, n-1);
+            time = System.currentTimeMillis() - time;
+            time *= 1000;
+            C += (float) (time/(n * Math.log(n)));
+        }
+        C /= 10;
+        System.out.println("Constant: ~ " + C);
+    }
+
     public static int[] makeArray(int n) {
         Random r = new Random();
         A = new int[n];
@@ -125,5 +181,4 @@ public class Main {
         }
         return A;
     }
-
 }
