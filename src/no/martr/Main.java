@@ -5,19 +5,23 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    public static final int
+
+    //grenser for størrelse på arrayer, basert på sorteringsmetode
+    private static final int
         MAX_SEQUENTIAL = 100000,
         MAX_RADIX = 10000000,
         MAX_N = 100000000;
 
-    public static int[] A;
-    public static int n, sortMethod, action;
-    public static long time;
+    //tar vare på array, størrelsen n, sorteringsmetoden og tid.
+    private static int[] A;
+    private static int n;
+    private static int sortMethod;
+    private static long time;
 
     public static void main(String[] args) {
         sortMethod = getSortMethod();
         A = getArray();
-        action = chooseAction();
+        int action = chooseAction();
 
         if (action == 1) {
            time = System.currentTimeMillis();
@@ -30,6 +34,7 @@ public class Main {
        }
     }
 
+    // Lar bruker velge sorteringsmetode
     private static int getSortMethod() {
         int option = -1;
         Scanner scanner = new Scanner(System.in);
@@ -48,7 +53,8 @@ public class Main {
         return option;
     }
 
-    public static int[] getArray() {
+    // Lar bruker velge størrelse på array
+    private static int[] getArray() {
         n = -1;
         int max;
         Scanner scanner = new Scanner(new InputStreamReader(System.in));
@@ -68,7 +74,8 @@ public class Main {
         return makeArray(n);
     }
 
-    public static int chooseAction() {
+    //Lar bruker velge mellom de to testene
+    private static int chooseAction() {
         Scanner scanner = new Scanner(new InputStreamReader(System.in));
         int choice = -1;
         while (choice < 0 || choice > 2) {
@@ -83,6 +90,7 @@ public class Main {
         return choice;
     }
 
+    //henter riktig metode for sorteringen
     private static void sort(int sortMethod) {
         switch (sortMethod) {
             case 1:
@@ -101,27 +109,28 @@ public class Main {
         }
     }
 
+    //henter riktig metode for estimeringen
     private static void calculate(int sortMethod) {
         switch (sortMethod) {
             case 1:
-                calculateInsertion();
+                calculateEstimateInsertion();
                 break;
 
             case 2:
-                calculateQuickSort();
+                calculateEstimateQuickSort();
                 break;
 
             case 3:
-                calculateMergeSort();
+                calculateEstimateMergeSort();
                 break;
 
             case 4:
-                calculateRadixSort();
+                calculateEstimateRadixSort();
                 break;
         }
     }
 
-    private static void calculateRadixSort() {
+    private static void calculateEstimateRadixSort() {
         float C = 0;
         int digits = Sort.countDigits(n);
 
@@ -133,11 +142,11 @@ public class Main {
             C += (float) time / ( n * digits);
         }
         C /= 10;
-        System.out.println("Constant: ~ " + C);
+        System.out.println("Konstant: ~ " + C);
 
     }
 
-    private static void calculateMergeSort() {
+    private static void calculateEstimateMergeSort() {
         float C = 0;
         for (int i = 0; i < 10; i++) {
             time = System.currentTimeMillis();
@@ -147,10 +156,10 @@ public class Main {
             C += (float) (time/(n * Math.log(n)));
         }
         C /= 10;
-        System.out.println("Constant: ~ " + C);
+        System.out.println("Konstant: ~ " + C);
     }
 
-    public static void calculateInsertion() {
+    private static void calculateEstimateInsertion() {
         float C = 0;
         for (int i = 0; i < 10; i++) {
             time = System.currentTimeMillis();
@@ -160,10 +169,10 @@ public class Main {
             C += (float) time/ (n * n);
         }
         C /= 10;
-        System.out.println("Constant: ~ " + C);
+        System.out.println("Konstant: ~ " + C);
     }
 
-    public static void calculateQuickSort() {
+    private static void calculateEstimateQuickSort() {
         float C = 0;
         for (int i = 0; i < 10; i++) {
             time = System.currentTimeMillis();
@@ -173,10 +182,10 @@ public class Main {
             C += (float) (time/(n * Math.log(n)));
         }
         C /= 10;
-        System.out.println("Constant: ~ " + C);
+        System.out.println("Konstant: ~ " + C);
     }
 
-    public static int[] makeArray(int n) {
+    private static int[] makeArray(int n) {
         Random r = new Random();
         A = new int[n];
         for (int i = 0; i < n; i++) {
