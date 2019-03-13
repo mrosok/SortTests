@@ -72,7 +72,10 @@ public class Main {
         Scanner scanner = new Scanner(new InputStreamReader(System.in));
         int choice = -1;
         while (choice < 0 || choice > 2) {
-            System.out.print("Velg 1 for å sortere og se kjøretid, velg 2 for estimering av konstantverdi for sorteringsmetoden: ");
+            System.out.println("1 for å sortere og se kjøretid");
+            System.out.println("2 for estimering av konstantverdi for sorteringsmetoden");
+            System.out.println("0 for å avslutte");
+            System.out.print("Velg 0-2: ");
             choice = scanner.nextInt();
         }
         if (choice == 0)
@@ -108,11 +111,11 @@ public class Main {
                 calculateQuickSort();
                 break;
 
-            case 3:  //merge-sort arbeidsmengde O(n log(n))
+            case 3:
                 calculateMergeSort();
                 break;
 
-            case 4:  //radix-sort arbeidsmengde O(kn) eller O(n)
+            case 4:
                 calculateRadixSort();
                 break;
         }
